@@ -158,8 +158,8 @@
   /* WAX SEAL */
   .seal{
     position:absolute;
-    left:50%;top:52%;
-    width:104px;height:104px;
+    left:50%;top:50%;
+    width:min(34vw,140px);height:min(34vw,140px);
     transform:translate(-50%,-50%);
     z-index:8;
     transition:opacity .6s ease, transform .7s cubic-bezier(.5,-0.4,.7,.6);
@@ -209,6 +209,46 @@
   }
   .replay.show{opacity:1;pointer-events:auto;}
   .replay:hover{background:var(--gold);color:#fff;}
+
+  /* ===== FULL-PAGE INVITATION ===== */
+  .fullpage{
+    position:fixed;inset:0;z-index:30;
+    background:radial-gradient(120% 90% at 50% 0%, #fbf7f0 0%, var(--ivory) 45%, var(--blush) 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:7vh 8vw;
+    opacity:0;transform:scale(1.05);pointer-events:none;
+    transition:opacity 1.1s ease .6s, transform 1.3s ease .6s;
+  }
+  .fullpage.show{opacity:1;transform:scale(1);pointer-events:auto;}
+  .fullpage .fp-inner{
+    position:relative;z-index:2;max-width:640px;
+    border:1px solid rgba(195,154,86,.5);
+    padding:min(9vw,60px) min(8vw,54px);
+    background:rgba(255,253,248,.55);
+    border-radius:4px;
+    box-shadow:0 20px 60px rgba(120,90,60,.14);
+  }
+  .fp-orn{color:var(--gold);font-size:1.7rem;letter-spacing:.5em;margin-left:.5em;}
+  .fp-std{font-size:clamp(.85rem,2.6vw,1.05rem);letter-spacing:.5em;text-transform:uppercase;color:var(--sage-deep);margin:14px 0 4px;}
+  .fp-save{font-family:'Parisienne',cursive;font-size:clamp(1.6rem,6vw,2.4rem);color:var(--gold-deep);margin:2px 0 6px;}
+  .fp-names{font-family:'Parisienne',cursive;font-size:clamp(3rem,13vw,5.4rem);color:var(--wax);line-height:1.02;margin:4px 0;}
+  .fp-names .amp{display:block;font-size:.42em;color:var(--gold-deep);margin:-2px 0;}
+  .fp-line{font-size:clamp(.95rem,3vw,1.15rem);letter-spacing:.28em;text-transform:uppercase;color:#9c8b76;margin:12px 0;}
+  .fp-date{font-size:clamp(1.5rem,6vw,2.3rem);letter-spacing:.14em;color:var(--ink);margin:6px 0;}
+  .fp-loc{font-size:clamp(1.15rem,4vw,1.6rem);letter-spacing:.2em;color:var(--sage-deep);margin:4px 0 2px;}
+  .fp-foot{font-size:clamp(.8rem,2.6vw,1rem);letter-spacing:.24em;text-transform:uppercase;color:#b39b86;margin-top:22px;}
+  .fp-div{width:80px;height:1px;background:var(--gold);margin:18px auto;opacity:.65;}
+  .fp-back{
+    margin-top:30px;background:none;border:1px solid var(--gold);color:var(--gold-deep);
+    font-family:inherit;font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;
+    padding:9px 22px;border-radius:30px;cursor:pointer;transition:background .3s,color .3s;
+  }
+  .fp-back:hover{background:var(--gold);color:#fff;}
+  .fp-corner{position:absolute;width:min(30vw,240px);z-index:1;pointer-events:none;opacity:.9;}
+  .fp-corner.a{top:-6px;left:-6px;}
+  .fp-corner.b{top:-6px;right:-6px;transform:scaleX(-1);}
+  .fp-corner.c{bottom:-6px;left:-6px;transform:scaleY(-1);}
+  .fp-corner.d{bottom:-6px;right:-6px;transform:scale(-1,-1);}
 </style>
 </head>
 <body>
@@ -328,12 +368,56 @@
   <button class="replay" id="replay">Replay</button>
 </main>
 
+<!-- FULL-PAGE INVITATION -->
+<section class="fullpage" id="fullpage" aria-hidden="true">
+  <svg class="fp-corner a" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M-10 60 C 40 55, 70 30, 80 -10"/><path d="M-10 110 C 55 100, 95 60, 110 0"/><path d="M20 -5 C 25 40, 55 60, 95 62"/></g>
+    <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+    <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+    <g fill="#e7b6c1"><circle cx="34" cy="70" r="10"/><circle cx="24" cy="63" r="7"/><circle cx="44" cy="64" r="7"/><circle cx="30" cy="80" r="7"/></g>
+    <circle cx="34" cy="71" r="4.5" fill="#c39a56"/>
+    <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/><ellipse cx="55" cy="105" rx="15" ry="7" transform="rotate(35 55 105)"/></g>
+  </svg>
+  <svg class="fp-corner b" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M-10 60 C 40 55, 70 30, 80 -10"/><path d="M-10 110 C 55 100, 95 60, 110 0"/></g>
+    <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+    <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+    <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/></g>
+  </svg>
+  <svg class="fp-corner c" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M-10 60 C 40 55, 70 30, 80 -10"/><path d="M-10 110 C 55 100, 95 60, 110 0"/></g>
+    <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+    <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+    <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/></g>
+  </svg>
+  <svg class="fp-corner d" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M-10 60 C 40 55, 70 30, 80 -10"/><path d="M-10 110 C 55 100, 95 60, 110 0"/></g>
+    <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+    <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+    <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/></g>
+  </svg>
+
+  <div class="fp-inner">
+    <div class="fp-orn">&#10086;</div>
+    <div class="fp-std">Save the Date</div>
+    <div class="fp-names">Cooper<span class="amp">&amp;</span>Marisa</div>
+    <div class="fp-line">Are getting married</div>
+    <div class="fp-div"></div>
+    <div class="fp-date">June&nbsp;4,&nbsp;2027</div>
+    <div class="fp-loc">Orlando, Florida</div>
+    <div class="fp-foot">Formal invitation to follow</div>
+    <button class="fp-back" id="fpBack">View envelope again</button>
+  </div>
+</section>
+
 <script>
   const stage  = document.getElementById('stage');
   const promptEl = document.getElementById('prompt');
   const hint   = document.getElementById('hint');
   const replay = document.getElementById('replay');
   const env    = document.getElementById('env');
+  const fullpage = document.getElementById('fullpage');
+  const fpBack   = document.getElementById('fpBack');
 
   const steps = [
     { txt:"You're Invited",  small:"Tap the wax seal to open", hint:"Click to open" },
@@ -349,10 +433,14 @@
     hint.textContent = steps[step].hint;
     if(step === 3){
       hint.classList.add('hide');
-      replay.classList.add('show');
+      replay.classList.remove('show');
+      fullpage.classList.add('show');
+      fullpage.setAttribute('aria-hidden','false');
     }else{
       hint.classList.remove('hide');
       replay.classList.remove('show');
+      fullpage.classList.remove('show');
+      fullpage.setAttribute('aria-hidden','true');
     }
   }
 
@@ -365,6 +453,7 @@
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); advance(); }
   });
   replay.addEventListener('click', e=>{ e.stopPropagation(); step = 0; render(); });
+  fpBack.addEventListener('click', e=>{ e.stopPropagation(); step = 0; render(); });
 
   render();
 </script>
