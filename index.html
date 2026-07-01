@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Save the Date · Cooper &amp; Marisa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Parisienne&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ivory:#f7f3ec;
+    --blush:#f3e3e1;
+    --sage:#8a9a7b;
+    --sage-deep:#6f8062;
+    --gold:#c39a56;
+    --gold-deep:#a67c39;
+    --wax:#9c3b34;
+    --wax-deep:#7d2b26;
+    --ink:#4a4038;
+    --paper:#fffdf8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #fbf7f0 0%, var(--ivory) 45%, var(--blush) 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* corner florals */
+  .corner{position:fixed;width:min(38vw,340px);height:auto;z-index:0;opacity:.9;pointer-events:none;}
+  .corner.tl{top:-10px;left:-10px;}
+  .corner.tr{top:-10px;right:-10px;transform:scaleX(-1);}
+  .corner.bl{bottom:-10px;left:-10px;transform:scaleY(-1);}
+  .corner.br{bottom:-10px;right:-10px;transform:scale(-1,-1);}
+
+  .stage{
+    position:relative;
+    z-index:2;
+    width:min(92vw,540px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:24px 0 40px;
+  }
+
+  .prompt{
+    font-size:1.05rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    margin-bottom:26px;
+    min-height:1.4em;
+    text-align:center;
+    transition:opacity .5s ease;
+  }
+  .prompt small{display:block;font-size:.62rem;letter-spacing:.3em;color:#b39b86;margin-top:8px;}
+
+  /* ENVELOPE */
+  .envelope-wrap{
+    position:relative;
+    width:min(88vw,460px);
+    aspect-ratio:4/2.7;
+    cursor:pointer;
+    perspective:1400px;
+    filter:drop-shadow(0 26px 40px rgba(120,90,60,.28));
+  }
+
+  .envelope{position:absolute;inset:0;}
+
+  .env-body{
+    position:absolute;inset:0;
+    background:linear-gradient(155deg,#f3 e8d7 0%, #efe4d1 50%, #e7d9c1 100%);
+    background:linear-gradient(155deg,#f5ecdd 0%, #ede0cb 55%, #e3d3b9 100%);
+    border-radius:8px;
+    box-shadow:inset 0 0 30px rgba(150,120,80,.18);
+  }
+  /* side flaps drawn with gradients */
+  .env-body::before{
+    content:"";position:absolute;inset:0;border-radius:8px;
+    background:
+      linear-gradient(115deg, rgba(200,175,135,.55) 0 50%, transparent 50%) left/50% 100% no-repeat,
+      linear-gradient(245deg, rgba(200,175,135,.55) 0 50%, transparent 50%) right/50% 100% no-repeat;
+    opacity:.6;
+  }
+  /* bottom flap */
+  .env-bottom{
+    position:absolute;left:0;right:0;bottom:0;height:66%;
+    background:linear-gradient(180deg,#ecdcc2,#e0cdad);
+    clip-path:polygon(0 100%, 50% 26%, 100% 100%);
+    border-radius:0 0 8px 8px;
+    z-index:4;
+  }
+
+  /* the card that slides out */
+  .card{
+    position:absolute;
+    left:6%;right:6%;
+    bottom:8%;
+    height:118%;
+    background:var(--paper);
+    border-radius:6px;
+    box-shadow:0 10px 24px rgba(120,90,60,.22);
+    z-index:3;
+    transform:translateY(0);
+    transition:transform 1s cubic-bezier(.2,.8,.2,1), z-index 0s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:26px 20px;
+    border:1px solid #efe6d5;
+    overflow:hidden;
+  }
+  .card .flourish{color:var(--gold);font-size:1.5rem;letter-spacing:.4em;}
+  .card .std{font-size:.8rem;letter-spacing:.42em;text-transform:uppercase;color:var(--sage-deep);margin:10px 0 4px;}
+  .card .names{font-family:'Parisienne',cursive;font-size:clamp(2.4rem,10vw,3.6rem);color:var(--wax);line-height:1;margin:6px 0;}
+  .card .amp{display:block;font-size:.55em;color:var(--gold-deep);margin:2px 0;}
+  .card .date{font-size:1.5rem;letter-spacing:.12em;margin-top:8px;color:var(--ink);}
+  .card .sub{font-size:.95rem;letter-spacing:.18em;color:#9c8b76;margin-top:10px;text-transform:uppercase;}
+  .card .divider{width:60px;height:1px;background:var(--gold);margin:14px 0;opacity:.7;}
+
+  /* TOP FLAP */
+  .env-flap{
+    position:absolute;left:0;right:0;top:0;height:64%;
+    background:linear-gradient(180deg,#f0e2cb,#e6d5b6);
+    clip-path:polygon(0 0, 100% 0, 50% 92%);
+    transform-origin:top center;
+    transform:rotateX(0deg);
+    transition:transform 1s cubic-bezier(.3,.7,.2,1);
+    z-index:6;
+    backface-visibility:hidden;
+    box-shadow:0 3px 8px rgba(150,120,80,.12);
+  }
+  .env-flap::after{
+    content:"";position:absolute;inset:0;
+    clip-path:polygon(0 0, 100% 0, 50% 92%);
+    background:linear-gradient(180deg, rgba(255,255,255,.25), rgba(160,130,90,.08));
+  }
+
+  /* WAX SEAL */
+  .seal{
+    position:absolute;
+    left:50%;top:52%;
+    width:104px;height:104px;
+    transform:translate(-50%,-50%);
+    z-index:8;
+    transition:opacity .6s ease, transform .7s cubic-bezier(.5,-0.4,.7,.6);
+  }
+  .seal svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 6px rgba(90,30,25,.4));}
+  .seal .crack{opacity:0;transition:opacity .3s;}
+
+  /* ---- STATE CLASSES ---- */
+  /* state 1: seal cracked & gone */
+  .stage[data-step="1"] .seal,
+  .stage[data-step="2"] .seal,
+  .stage[data-step="3"] .seal{
+    opacity:0;transform:translate(-50%,40%) rotate(14deg) scale(.8);pointer-events:none;
+  }
+  .stage[data-step="1"] .seal .crack{opacity:1;}
+
+  /* state 2: flap open */
+  .stage[data-step="2"] .env-flap,
+  .stage[data-step="3"] .env-flap{
+    transform:rotateX(178deg);
+    z-index:2;
+    box-shadow:none;
+  }
+
+  /* state 3: card slides up */
+  .stage[data-step="3"] .card{
+    transform:translateY(-58%);
+    z-index:7;
+  }
+
+  .hint{
+    margin-top:30px;
+    font-size:.82rem;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:#bda88f;
+    animation:breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.45;}50%{opacity:1;}}
+  .hint.hide{opacity:0;animation:none;transition:opacity .4s;}
+
+  .replay{
+    margin-top:14px;background:none;border:1px solid var(--gold);
+    color:var(--gold-deep);font-family:inherit;font-size:.82rem;
+    letter-spacing:.24em;text-transform:uppercase;padding:9px 20px;border-radius:30px;
+    cursor:pointer;opacity:0;pointer-events:none;transition:opacity .5s, background .3s;
+  }
+  .replay.show{opacity:1;pointer-events:auto;}
+  .replay:hover{background:var(--gold);color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- Floral corners -->
+<svg class="corner tl" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M-10 60 C 40 55, 70 30, 80 -10"/>
+    <path d="M-10 110 C 55 100, 95 60, 110 0"/>
+    <path d="M20 -5 C 25 40, 55 60, 95 62"/>
+  </g>
+  <g fill="#d98c9a">
+    <circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/>
+    <circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/>
+  </g>
+  <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+  <g fill="#e7b6c1">
+    <circle cx="34" cy="70" r="10"/><circle cx="24" cy="63" r="7"/><circle cx="44" cy="64" r="7"/><circle cx="30" cy="80" r="7"/>
+  </g>
+  <circle cx="34" cy="71" r="4.5" fill="#c39a56"/>
+  <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/><ellipse cx="55" cy="105" rx="15" ry="7" transform="rotate(35 55 105)"/></g>
+</svg>
+<svg class="corner tr" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M-10 60 C 40 55, 70 30, 80 -10"/>
+    <path d="M-10 110 C 55 100, 95 60, 110 0"/>
+    <path d="M20 -5 C 25 40, 55 60, 95 62"/>
+  </g>
+  <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+  <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+  <g fill="#e7b6c1"><circle cx="34" cy="70" r="10"/><circle cx="24" cy="63" r="7"/><circle cx="44" cy="64" r="7"/><circle cx="30" cy="80" r="7"/></g>
+  <circle cx="34" cy="71" r="4.5" fill="#c39a56"/>
+  <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/><ellipse cx="55" cy="105" rx="15" ry="7" transform="rotate(35 55 105)"/></g>
+</svg>
+
+<!-- draw independently for bl/br -->
+<svg class="corner bl" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M-10 60 C 40 55, 70 30, 80 -10"/>
+    <path d="M-10 110 C 55 100, 95 60, 110 0"/>
+  </g>
+  <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+  <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+  <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/></g>
+</svg>
+<svg class="corner br" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="#8a9a7b" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M-10 60 C 40 55, 70 30, 80 -10"/>
+    <path d="M-10 110 C 55 100, 95 60, 110 0"/>
+  </g>
+  <g fill="#d98c9a"><circle cx="82" cy="26" r="13"/><circle cx="70" cy="18" r="9"/><circle cx="94" cy="20" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="90" cy="36" r="8"/></g>
+  <circle cx="82" cy="27" r="6" fill="#c39a56"/>
+  <g fill="#a9bd9a"><ellipse cx="120" cy="30" rx="15" ry="7" transform="rotate(-30 120 30)"/></g>
+</svg>
+
+<main class="stage" id="stage" data-step="0" role="button" tabindex="0" aria-label="Click to open the envelope">
+  <div class="prompt" id="prompt">You're Invited<small>Tap the wax seal to open</small></div>
+
+  <div class="envelope-wrap" id="env">
+    <div class="envelope">
+      <div class="env-body"></div>
+
+      <!-- The invitation card (behind flap, slides up last) -->
+      <div class="card">
+        <div class="flourish">&#10086;</div>
+        <div class="std">Save the Date</div>
+        <div class="names">Cooper<span class="amp">&amp;</span>Marisa</div>
+        <div class="divider"></div>
+        <div class="date">June&nbsp;4,&nbsp;2027</div>
+        <div class="sub">Are getting married</div>
+      </div>
+
+      <!-- bottom & top flaps -->
+      <div class="env-bottom"></div>
+      <div class="env-flap"></div>
+
+      <!-- wax seal -->
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <radialGradient id="waxg" cx="38%" cy="32%" r="75%">
+              <stop offset="0%" stop-color="#c0524a"/>
+              <stop offset="55%" stop-color="#9c3b34"/>
+              <stop offset="100%" stop-color="#7d2b26"/>
+            </radialGradient>
+          </defs>
+          <path fill="url(#waxg)" d="M50 4
+            c6 0 8 6 14 7 s11-3 15 2 -1 11 2 16 8 6 6 13 -6 8-6 14 4 11-1 16-9 1-13 6-4 10-11 9-9-4-15-2-8 7-14 6-8-6-14-7-11 3-15-2 1-11-2-16-8-6-6-13 6-8 6-14-4-11 1-16 9-1 13-6 4-10 11-9 9 4 15 2 8-7 14-6z"/>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="#7d2b26" stroke-width="1.6" opacity=".6"/>
+          <text x="50" y="60" text-anchor="middle" font-family="'Parisienne',cursive" font-size="30" fill="#f2d9b8">C&amp;M</text>
+          <g class="crack" stroke="#5f1f1b" stroke-width="1.5" fill="none" stroke-linecap="round">
+            <path d="M50 6 L48 26 L54 40 L47 54 L52 70 L49 94"/>
+            <path d="M6 50 L28 47 L42 53 L60 48 L78 54 L94 50"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">Click to open</div>
+  <button class="replay" id="replay">Replay</button>
+</main>
+
+<script>
+  const stage  = document.getElementById('stage');
+  const promptEl = document.getElementById('prompt');
+  const hint   = document.getElementById('hint');
+  const replay = document.getElementById('replay');
+  const env    = document.getElementById('env');
+
+  const steps = [
+    { txt:"You're Invited",  small:"Tap the wax seal to open", hint:"Click to open" },
+    { txt:"Breaking the seal", small:"", hint:"Click to lift the flap" },
+    { txt:"Opening", small:"", hint:"Click to reveal the card" },
+    { txt:"With love", small:"", hint:"" }
+  ];
+
+  let step = 0;
+  function render(){
+    stage.dataset.step = step;
+    promptEl.innerHTML = steps[step].txt + (steps[step].small ? '<small>'+steps[step].small+'</small>' : '');
+    hint.textContent = steps[step].hint;
+    if(step === 3){
+      hint.classList.add('hide');
+      replay.classList.add('show');
+    }else{
+      hint.classList.remove('hide');
+      replay.classList.remove('show');
+    }
+  }
+
+  function advance(){
+    if(step < 3){ step++; render(); }
+  }
+
+  env.addEventListener('click', advance);
+  stage.addEventListener('keydown', e=>{
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); advance(); }
+  });
+  replay.addEventListener('click', e=>{ e.stopPropagation(); step = 0; render(); });
+
+  render();
+</script>
+</body>
+</html>
